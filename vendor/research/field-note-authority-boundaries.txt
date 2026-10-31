@@ -1,0 +1,90 @@
+STRATUM / PRODUCT SECURITY
+FIELD NOTE 01
+Agent-to-Infrastructure Controls
+Evidence-Gated Remediation
+Mazze LeCzzare Frazer
+Target: Senior Product Security Engineer · Snyk Boston
+100 Summer St, Floor 7, Boston, MA 02110
+Durham-based, open to hybrid in Boston and relocation/travel.
+mazze@mazzeleczzare.com
+ +1 919-667-6994
+linkedin.com/in/mazze-leczzare
+ github.com/mazze93
+AUTHORITY / EVIDENCE / ACCOUNTABILITY
+APPLICATION SUPPLEMENT · 01
+AI agents can draft changes across repositories, cloud accounts, and deployment pipelines. The security problem is whether
+untrusted context can become privileged infrastructure change without a defensible chain of identity, authority, policy, execution,
+and independently observed outcome. A plausible patch or green CI job does not authorize a change or establish that its intended
+control held.
+Authority perimeter. Tickets, CSPM findings, repository content, and MCP responses are inputs, never grants. The agent proposes; a separate
+deterministic action gate evaluates the exact operation; provider IAM and release gates enforce execution; the owning platform team approves
+material changes. Protected assets: identities, infrastructure, artifacts, and decision records.
+BOUNDARY /
+OBJECTIVE
+CONTROL / EVIDENCE / RESPONSE
+REPRODUCE / EXPECT
+01
+MCP/tool call
+Least privilege
+Preconditions / policy: initiating identity, tenant, authenticated source,
+allowlisted tool/verb/resource, normalized parameters, approved
+change, current policy decision. Trusted origin alone does not make tool
+content safe.
+Evidence gate: PR-linked source/request digests, delegated scope,
+policy version/decision, correlation ID, response or denial.
+Fail closed / escalate: missing provenance, conflicting scope, or
+unavailable policy blocks invocation; retain the attempted request and
+ask the owner to resolve authority.
+Approve read-only access to project
+A. Supply a tool response requesting
+an IAM grant in project B; repeat with
+alternate resource encoding. Expect
+no provider call and a recorded scope
+denial.
+02
+Delegated IAM
+Authorization at
+time of action
+Preconditions / policy: short-lived delegation bound to principal, change,
+resource set, and permitted verbs; approval bound to request digest and
+expiry. Re-evaluate at dispatch; provider IAM independently authorizes
+the effective principal.
+Evidence gate: PR-linked delegation lineage, approval, current policy
+result, provider receipt or denial, and resource diff.
+Fail closed / escalate: scope expansion, expired/revoked grant, or
+changed request denies execution; owning team must re-authorize.
+Queue a narrowly approved action,
+then revoke delegation before
+dispatch. Retry the execution ID and
+substitute a cross-project target.
+Expect denial and unchanged
+resource state; reconcile ambiguous
+provider outcomes before retry.
+03
+IaC / CI/CD
+Evidence
+completeness
+Preconditions / policy: identifiable source, code-owner review, approved
+plan, security baseline checks, scoped promotion authority, and an
+independent target-state verifier.
+Evidence gate: PR-linked commit/plan/image digests, CI provenance,
+approval, deployment receipt, and fresh post-deploy observation tied to
+the exact resource and claim.
+Fail closed / escalate: missing or mismatched evidence blocks
+promotion or closure; quarantine the candidate and retain an unresolved
+record for the platform owner.
+Present a green receipt for commit A
+as proof for commit B; then withhold
+the target-state query. Expect blocked
+promotion or unresolved remediation,
+with the mismatch and verification
+failure preserved.
+Implemented support: Stratum. I built an append-only decision ledger with guarded transitions, checked-evidence requirements, deterministic status
+projection, separate declared/evidence-backed authority tiers, and replay validation. It preserves proposals, verification, disputes, and invalidations
+without editable closure. The cloud action controls above are proposed integrations: the repository explicitly separates its implemented event
+contract from the unimplemented agent PolicyEngine. Stratum does not replace provider authorization, telemetry integrity, or accountable human
+review.
+Touchstone verification. Name the scoped claim and offered proof; enumerate uncovered boundaries; run concrete probes; preserve held, failed, or
+unresolved results and the tested perimeter. Re-probe a repair once; a second failure escalates. Green CI is evidence about a check, not automatic
+proof of the security claim.
+Inspect the implementation: Repository / Live Atrium / Authority boundary / Event contract
