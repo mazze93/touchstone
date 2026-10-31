@@ -1,0 +1,21 @@
+[package]
+name = "touchstone-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Touchstone foundational CLI"
+default-run = "touchstone"
+
+[[bin]]
+name = "touchstone"
+path = "src/main.rs"
+
+[dependencies]
+touchstone-chain = { path = "../touchstone-chain" }
+touchstone-ledger = { path = "../touchstone-ledger" }
+touchstone-integrity = { path = "../touchstone-integrity" }
+touchstone-anchor = { path = "../touchstone-anchor" }
+clap = { version = "4.5.23", features = ["derive"] }
+serde_json = { workspace = true }
+chrono = { workspace = true }
+

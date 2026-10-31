@@ -1,0 +1,13 @@
+[package]
+name = "touchstone-integrity"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Integrity state machine and desk boundary tripwires (STELE-inspired)"
+
+[dependencies]
+touchstone-chain = { path = "../touchstone-chain" }
+serde = { workspace = true }
+thiserror = { workspace = true }
+regex = { workspace = true }
+chrono = { workspace = true }
