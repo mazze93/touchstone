@@ -1,1 +1,1 @@
-__FILE__/workspace/vendor/research/naked-truth-bearing-rigor.md
+PLACEHOLDER
