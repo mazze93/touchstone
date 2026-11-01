@@ -1,1 +1,1 @@
-file:///workspace/.push-payloads/naked-30k.md
+__LOAD__/workspace/.push-payloads/naked-30k.md
