@@ -1,1 +1,1 @@
-/workspace/vendor/research/naked-truth-bearing-rigor.md
+{{READ:/workspace/vendor/research/naked-truth-bearing-rigor.md}}
