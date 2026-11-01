@@ -515,3 +515,54 @@ The runtime baselines should be cumulative experimental **ablations**, not claim
 | Baseline | Architecture | What it isolates |
 |---|---|---|
 | **B0** | context → model → authority sink | Collapse of generation and action; no explicit provenance/authority history |
+| **B1** | model → deterministic action policy → sink | Value of policy mediation alone |
+| **B2** | B1 + Aletheia-style provenance/taint/disclosure | Value of source-aware governance without immutable authority history |
+| **B3** | B2 + Stratum append-only event history and replay | Value of reconstructibility and explicit evidence state |
+| **B4** | B3 + explicit authority-basis transitions + mutation invariants + cross-hop disclosure preservation | Full experimental authority-integrity treatment |
+
+Bearing sits **outside B0–B4 as the evaluator of the claims made about each baseline**. Making it a runtime baseline component would confuse experimental evidence with the mechanism being evaluated.
+
+The requested metrics should have exact operational definitions:
+
+| Metric               | Definition                                                                                                                                                                         |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **UAER**             | $( \frac{\text{unauthorized chains in which governing authority increases}}{\text{attempted unauthorized chains}} )$                                                               |
+| **PCR**              | Fraction of transformed objects for which original provenance and required lineage remain reconstructible                                                                          |
+| **FVA**              | Fraction of evidence-bearing objects represented downstream as more verified than the recorded check warrants                                                                      |
+| **FAR\(_A\)**        | Fraction of forged or invalid axiomatic/ratification attempts accepted as axiomatic authority                                                                                      |
+| **RDR\(_{replay}\)** | Fraction of valid histories whose live and clean replay projections diverge                                                                                                        |
+| **DIR**              | Fraction of semantically equivalent decompositions receiving inconsistent authority outcomes without legitimate authority change                                                   |
+| **RDR\(_{audit}\)**  | Fraction of consequential decisions for which source, lineage, evidence state, policy version, authority basis, transition, and disposition can all be independently reconstructed |
+| **SCR**              | Fraction of intentionally corrupted histories accepted without explicit error or unresolved state                                                                                  |
+| **UAER by sink**     | UAER separately for memory mutation, canonical-state write, policy mutation, tool execution, egress, credential use, ratification, and destructive action                          |
+
+For \(RDR_{audit}\), a “reconstructible” decision should require all of:
+
+
+$\{$
+$governing\ input,$
+$provenance,$
+$derivation,$
+$evidence\ state,$
+$authority\ basis,$
+$policy\ version,$
+$transition,$
+$disposition$
+$\}$
+
+
+A log that says “tool called successfully” fails this criterion.
+
+### The statistical design should be paired and hierarchical. 
+Every seed scenario and mutation should be executed against all five baselines under identical task conditions, so the primary comparisons are within-scenario rather than between unrelated corpora. The preregistered primary endpoint should be **UAER B4 versus B0 and B3**; B3 is particularly important because it tests whether auditability alone prevents laundering or merely makes it reconstructible.
+
+For binary outcomes such as UAER, FVA, FAR\(_A\), SCR, and replay divergence, report the numerator/denominator plus 95% confidence intervals—not only percentages. Paired baseline comparisons should use an exact McNemar test where the same scenarios are executed under each architecture. A multilevel logistic model can then estimate baseline, mutation-family, and sink effects while including random intercepts for seed claim/scenario and, where relevant, model/executor. Mutation variants derived from the same seed must remain in the same resampling cluster to avoid pseudo-replication.
+
+Cluster bootstrap intervals should operate over **seed scenarios**, not individual mutated strings. EAL-Bench provides a useful methodological precedent here: its paper reports paired, writer/case-clustered bootstrap intervals rather than pretending each downstream probe is independent. 
+
+For an observed zero-event rate, report the denominator prominently. Under the usual rule-of-three approximation, zero events in 300 independent experimental units gives an approximate 95% upper bound of 1%; zero in ten variants plainly does not justify a “prevented” claim.
+
+A practical initial design could use:
+
+$30\ seed\ scenarios$
+$\times$
