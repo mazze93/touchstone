@@ -215,7 +215,7 @@ Claude for more hands-on techniques.
 LIVE EXPLOITATION ACTORS ON THE RISE
 As we discussed above, the share of actors scoring medium-risk or higher on AI enablement
 grew from roughly 33.5% in the first six-month period of the study to roughly 56.1% in the
-second—a a 1.7x increase in under a year. The cohort shifted between these two periods by
+second—a 1.7x increase in under a year. The cohort shifted between these two periods by
 about 22.6 percentage points: while the majority of actors had a low risk score in the first
 six-month period, the majority had a medium risk score in the second six-month period.
 While improved threat detection techniques may have contributed to this increase, we also
