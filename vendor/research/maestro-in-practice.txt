@@ -1,1 +1,280 @@
- 
+MAESTRO L1–L7
+CLOUD SECURITY ALLIANCE  ·  IRIUSRISK  ·  ACADEMIC RESEARCH
+MAESTRO in Practice
+Threats, mitigations, and outcomes across 12 case studies
+A structured field study of the seven-layer agentic AI threat
+modeling framework, with comparative analysis and hardening
+recommendations for securing multi-agent systems.
+PREPARED FOR  /  Security Engineering · Content Strategy · Durham, NC
+Author: Mazze LeCzzare Frazer  ·  Compiled June 2026
+ 12
+ CASE STUDIES
+ 7
+ MAESTRO LAYERS
+ 60+
+ THREATS CATALOGED
+ 204
+ MITIGATIONS (TITO)
+MAESTRO (Multi-Agent Environment, Security, Threat, Risk, and Outcome) was introduced by
+Ken Huang at the Cloud Security Alliance in February 2025 [Huang, 2025a]. This report
+compiles 12 documented applications across CSA, IriusRisk, and preprint research between
+2025 and 2026 — extracting the threats identified, the mitigations applied, and the outcomes
+observed for each of the seven layers.
+
+MAESTRO in Practice
+Mazze LeCzzare Frazer · 2026
+MAESTRO in Practice
+Page 2
+Table of contents
+AT A GLANCE · 8 sections · 12 case studies · jump links resolve to PDF bookmarks
+Executive Summary
+ 3
+1 · Framework Foundation
+ 4
+2 · Case Studies at a Glance
+ 6
+3 · Case Study Deep Dives
+ 8
+1. OpenAI Responses API — third-party API threat surface
+ 8
+2. Google A2A Protocol — agent-to-agent identity and trust
+ 10
+3. MCP Secure Implementation — Grid Operations Assistant
+ 11
+4. IriusRisk v4.47 — MAESTRO as a commercial threat library
+ 12
+5. Network monitoring agentic AI — an empirical MAESTRO prototype study
+ 13
+6. A2A protocol — preprint security analysis
+ 14
+7. TITO CI/CD scan — MAESTRO embedded in the pipeline
+ 15
+8. RAG agents as enterprise insider threats
+ 16
+9. MCP security crisis — systemic design flaws
+ 17
+10. “Living Off the Agent” (LOTA) — AI agents as lateral movement vectors
+ 18
+11. Snyk Labs — layered threat modeling guidance
+ 19
+12. Enterprise agentic AI lifecycle governance
+ 20
+4 · Per-Layer Threat Catalog
+ 21
+5 · Comparative Insights
+ 29
+6 · Recommendations
+ 31
+7 · Implementation Checklist
+ 35
+8 · Annotated References & Evidence Notes
+ 37
+
+MAESTRO in Practice
+Mazze LeCzzare Frazer · 2026
+MAESTRO in Practice
+Page 3
+Executive summary
+CSA presents MAESTRO as a purpose-built threat-modeling framework for agentic AI [Huang,
+2025a]. Unlike STRIDE, PASTA, or LINDDUN, it explicitly models adversarial machine learning,
+agent autonomy, dynamic agent-to-agent interactions, and AI supply chain risk. Its
+seven-layer decomposition has been adopted in published CSA guidance and commercial
+tooling, including IriusRisk v4.47 [IriusRisk, 2025] (October 2025), the open-source TITO
+CI/CD scanner [TITO repo, 2026] (February 2026), and Snyk Labs guidance [Snyk Labs, 2026]
+(February 2026).
+Core findings
+L3 is the most consistently exploited attack surface. Layer 3 (Agent Frameworks) appears in every case
+study reviewed. It is the orchestration hub linking foundation models (L1) to action execution (L4), and
+the most common architectural failure is collapsing L1→L3→L4 into a single implicit trust domain.
+Trust boundary validation is missing by default. A TITO scan [Leath & Huang, 2026] of a representative
+agent surfaced 9 distinct threats and 204 mitigation recommendations — self-reported tool output, not
+independently reproduced here — with no validation point between user input and database access in
+the entire pipeline.
+Memory and RAG are a persistence vector. CSA Labs [CSA Labs, 2026a] reports that 5 malicious
+documents can drive a 90% knowledge-base compromise rate, citing PoisonedRAG-style findings; treat
+as a CSA-reported figure pending the original study. Memory poisoning persists across sessions and
+cascades through L7.
+MCP servers cannot be trusted by source. CSA Labs [CSA Labs, 2026b] cites a 72.8% tool-poisoning
+success rate against production LLM agents (attributed to Invariant Labs) using Unicode injection in
+MCP tool descriptions; see the original Invariant Labs research for methodology.
+Agentic kill chains are real and growing. By 2026, CSA Labs' incident review [CSA Labs, 2026c] found
+15 of 21 documented promptware incidents exhibited four or more kill-chain stages, with lateral
+movement in 8 — the LOTA ("Living Off the Agent") pattern, per CSA's stated corpus and coding rules.
+Best decision — Adopt MAESTRO as the single threat modeling axis
+Use MAESTRO as the structural threat model, MITRE ATLAS as the technique taxonomy, and NIST AI
+RMF as the governance wrapper. When not to use: single-call LLM products with no tool use or
+persistent memory — STRIDE remains sufficient. Alternative: OWASP Agentic Security Initiative (ASI)
+— complementary, but lacks MAESTRO's layered decomposition.
+
+MAESTRO in Practice
+Mazze LeCzzare Frazer · 2026
+MAESTRO in Practice
+Page 4
+1 · Framework foundation
+MAESTRO was authored by Ken Huang (CEO, DistributedApps.ai; Co-Chair, CSA AI Safety Working
+Groups) and published by the Cloud Security Alliance on February 6, 2025 [Huang, 2025a]. The
+framework's reference hub is maintained by CSA Labs [CSA Labs, MAESTRO Hub].
+AT A GLANCE · 7 layers · 6-step methodology · supersedes STRIDE/PASTA/LINDDUN for agentic AI
+How it differs from prior frameworks
+ Framework
+Era
+Models AI threats?
+Models agent
+autonomy?
+Layered?
+STRIDE
+(Microsoft)
+2002
+No
+No
+Per-component
+PASTA
+2012
+No
+No
+Linear pipeline
+LINDDUN
+2010s
+Privacy only
+No
+Per-component
+OWASP LLM Top
+10
+2023
+Yes (LLM-centric)
+Partial
+Flat list
+MAESTRO
+2025
+Yes — extends
+STRIDE/PASTA
+Yes — agent +
+multi-agent
+7 layers + cross-layer
+The seven layers
+ Layer
+Name
+Scope
+L1
+Foundation Models
+Model weights, training pipeline, inference, base alignment.
+L2
+Data Operations
+Databases, vector stores, RAG pipelines, training datasets,
+embedding infrastructure.
+L3
+Agent Frameworks
+LangChain, AutoGen, CrewAI, OpenAI Responses API, custom
+orchestrators, tool dispatch.
+L4
+Deployment &
+Infrastructure
+Containers, Kubernetes, IaC, cloud services, networks, serverless
+functions.
+L5
+Evaluation & Observability
+Logging, metrics, anomaly detection, evaluation benchmarks, drift
+monitoring.
+L6
+Security & Compliance
+Vertical (cross-cutting): AuthN/Z, audit trails, regulatory mapping,
+key management.
+
+§1 · FRAMEWORK FOUNDATION
+Mazze LeCzzare Frazer · 2026
+MAESTRO in Practice
+Page 5
+Layer
+Name
+Scope
+L7
+Agent Ecosystem
+Agent registries, A2A protocol, MCP servers, B2B integrations,
+multi-agent orchestration.
+Six-step implementation methodology
+1. System decomposition — break the system into components by layer; define agent capabilities, goals,
+tool registries, and interactions.
+2. Layer-specific threat modeling — apply MAESTRO's threat catalogs to each layer.
+3. Cross-layer threat identification — analyze how vulnerabilities in one layer cascade to others.
+4. Risk assessment — likelihood × impact; prioritize via risk matrix.
+5. Mitigation planning — select layer-specific, cross-layer, and AI-specific controls.
+6. Implementation and monitoring — deploy controls; continuously update as agents and threats evolve.
+
+§1 · FRAMEWORK FOUNDATION
+Mazze LeCzzare Frazer · 2026
+MAESTRO in Practice
+Page 6
+2 · Case studies at a glance
+Twelve documented applications of MAESTRO across primary sources (CSA, IriusRisk, Snyk Labs) and
+preprint research between March 2025 and May 2026. Each is detailed in the next section.
+AT A GLANCE · 12 case studies · 7 CSA articles/notes · 2 preprints · 3 vendor/journal sources
+#
+Subject
+Source
+Date
+Evidence
+type
+Primary layers
+1
+OpenAI Responses
+API
+CSA / Huang
+Mar
+2025
+First-party
+L1·L2·L3·L5·L6·L7
+2
+Google A2A Protocol
+CSA / Huang &
+Habler
+Apr
+2025
+First-party
+L3·L1·L2·L6·L7
+3
+MCP Secure
+Implementation
+CSA / Huang &
+Chen
+Jun
+2025
+First-party
+L2·L3·L4·L6·L7
+4
+IriusRisk MAESTRO
+Library
+IriusRisk v4.47
+Oct
+2025
+Vendor
+release
+All 7 + ATLAS
+5
+Network monitoring
+agent
+arXiv 2508.10043
+Aug
+2025
+Preprint
+L2·L3·L4
+6
+A2A protocol
+arXiv 2504.16902
+Apr
+2025
+Preprint
+All 7
+7
+TITO CI/CD scan of
+agent
+CSA / Leath &
+Huang
+Feb
+2026
+First-party
+L1·L2·L3·L4
+8
+RAG agents as insider
+threats
+CSA Labs
+Mar
