@@ -1,1 +1,1 @@
-@cursor/stores/self/mcp-step-a-args.json
+file:///workspace/.push-payloads/naked-30k.md
