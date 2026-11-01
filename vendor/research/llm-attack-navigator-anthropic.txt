@@ -1,1 +1,1 @@
-$readFile:/workspace/vendor/research/llm-attack-navigator-anthropic.txt
+@/workspace/vendor/research/llm-attack-navigator-anthropic.txt
