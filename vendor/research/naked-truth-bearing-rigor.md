@@ -36,4 +36,28 @@ $$
 }
 
 $$
-The stack's central research contribution is better described as **epistemic condition preservation** or **authority integrity** than generic provenance. Aletheia currently exposes a meaningful subset of the conditions relevant to authority—origin, trust, taint, governing parameters, and risk factors—but the more general “unconcealment” representation discussed in the paper would be a proposed extension, not an implemented feature. Temenos then governs what follows from those disclosed conditions; Stratum 
+The stack's central research contribution is better described as **epistemic condition preservation** or **authority integrity** than generic provenance. Aletheia currently exposes a meaningful subset of the conditions relevant to authority—origin, trust, taint, governing parameters, and risk factors—but the more general “unconcealment” representation discussed in the paper would be a proposed extension, not an implemented feature. Temenos then governs what follows from those disclosed conditions; Stratum preserves how authority arose; Apatea contests invariants; Bearing tests whether the research claims made about the system survive independent evidence and adversarial removal.
+
+This is also well differentiated from the closest 2026 work. AGATE already combines runtime authorization and data provenance, parameter-bound grants, deterministic judgment, and replayable evidence; its evaluation reports 153 exercised attack-chain records, a parameter-rewriting bypass, utility costs, and perfect live/replay agreement for 63 scenarios on each of two evaluated platforms. EAL-Bench independently shows why persistent state must be treated as an authorization surface: false authority reached 50.2% in one evaluated condition, and executors acted on already-formed false authority in 98.6% of matched trials. Agent Flight Recorder establishes a strong neighboring result for tamper-evident, semantically structured forensic histories. The novel target here is narrower: **whether the epistemically relevant conditions under which information becomes authoritative remain unconcealed, distinguishable, and reconstructible across transformations—and whether claims about that property themselves survive adversarial scrutiny.**
+
+The experimental centerpiece should therefore be **authority-laundering under epistemic-condition mutation**, not prompt-injection detection accuracy. The central falsifiable invariant is:
+$$
+
+\Delta A_g(x) > 0
+\Rightarrow
+\exists T_{\text{authorized}}
+
+$$
+and, for axiomatic authority:
+$$
+
+A_{\text{axiomatic}}
+\not\xrightarrow{\text{persistence, paraphrase, consensus}}
+A_{\text{verified}}
+
+$$
+The system need not discover universal truth. It must not allow its reason for treating something as authoritative to become concealed.
+
+## Evidence base and artifact inventory
+
+The inventory below distinguishes **implemented**, **observed/documented**, and **proposed** properties. That distinction is essential because some of the conceptual architecture is ahead of current inte
