@@ -1,0 +1,1 @@
+__LOAD_FROM__:/tmp/naked-prog/suffix_40_to_45.md
