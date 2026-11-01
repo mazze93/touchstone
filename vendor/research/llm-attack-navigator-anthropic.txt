@@ -1,1 +1,107 @@
-PLACEHOLDER
+red.anthropic.com
+Mapping AI-enabled cyber
+threats: Insights from the LLM
+AT T&C K  Nav i g a to r
+June 3, 2026
+Kyla Guru, Alex Moix, and Jacob Klein
+We’ve spent the past year investigating how threat actors are weaponizing AI to conduct
+cyber operations. Today, we’re sharing a new analysis that maps these real-world attacks
+onto the MITRE ATT&CK® framework, a database of tactics and techniques used by
+cyberattackers. Doing so reveals patterns that challenge traditional assumptions about
+cybersecurity—for example, the level of risk a threat actor poses can be assessed via
+metrics like technical sophistication or breadth of techniques. We partnered with Verizon to
+include some of these results in the 2026 Verizon Data Breach Investigation Report (DBIR),
+and are publishing this report to offer a longer-form analysis of trends we are seeing in AI-
+enabled cyber operations.
+Open the interactive Navigator in a new tab.
+Key findings
+For this study, we analyzed 832 accounts associated with malicious cyber activity over the
+course of one year, from March 2025 to March 2026. Anthropic banned these accounts from
+using Claude for violating our Usage Policy. The accounts in this analysis are just a subset of
+those we investigated and banned during this time period; we selected them because we
+had enough detail about their malicious activities to map their techniques onto the MITRE
+ATT&CK framework.
+The 832 accounts in our analysis used AI models for all 14 tactics and 482 unique sub-
+techniques across the framework, from initial reconnaissance through final impact. We
+also developed a risk-scoring framework (described later in this post) to assess how much AI
+assistance helped these actors plan their attacks. Most strikingly, we found that the
+percentage of actors labeled as being medium risk or higher jumped from 33% to 56%
+between the first and second halves of the year. This suggests that AI is helping attackers
+conduct increasingly sophisticated cyber operations with greater ease.
+There are three key findings from our analysis:
+1. The number of actors using AI for cyber operations is growing, and their actions
+carry higher risk. As mentioned above, the percentage of medium- or high-risk
+actors increased by a factor of about 1.7 in under a year, from 33% in the first half of
+our study window to 56% in the second. That growth is concentrated in actors using
+AI for some of the most harmful activities, including lateral movement, credential
+dumping, and web shells — that carry the highest per-actor risk weight in our scoring,
+rather than the commodity build-and-obfuscate work that dominates the rest of the
+population. Traditionally, only the most technically sophisticated actors could operate
+across the entire killchain, or the sequential stages of a cyberattack. But our analysis
+found that this is no longer the case. The platform through which they access the
+model (such as an API or an agentic coding platform like Claude Code) also has no
+bearing on how high-risk their actions are. What does distinguish the highest-risk
+actors is which techniques they’re asking the model for.
+2. Agentic scaffolding will make it possible for cyberattacks to be far more
+autonomous. As AI-enabled cyber techniques become more common among this
+population, it will become harder to differentiate an actor’s risk level based on what
+they are asking a model to do. Instead, the differentiator will become the scaffolding—
+the surrounding code, architecture, and tooling that makes AI models more capable—
+that actors build around the model so they can chain together attack stages
+autonomously. This was starkly apparent in the cyber espionage campaign we
+disrupted in November 2025, which had a maximum risk score of 100 yet only used a
+number of techniques comparable to medium-risk actors. That attack was distinct not
+because of the number of techniques it employed but because of how the attackers
+used an AI agent to orchestrate them.
+3. The MITRE ATT&CK framework doesn’t yet cover the autonomous actions that
+make these actors so dangerous. Autonomous killchain orchestration, real-time
+pivot decisions, and AI-directed execution with no human intervention don’t yet have
+ID numbers in the ATT&CK framework. Our report included 13,873 observations of
+malicious activity, all of which mapped to categories laid out in the framework—but the
+behaviors that distinguish the highest-risk actors, and determine the speed and scale
+of their operations, don’t yet have such IDs. The taxonomy that modern threat
+intelligence relies on needs to grow to capture them.
+While Claude Mythos Preview demonstrates where frontier AI cyber capabilities are heading
+—models able to find and exploit vulnerabilities at a level approaching the most skilled
+human researchers—this report tells us how threat actors are misusing generally available
+models today. It also serves as a guide to how threat actors are likely to misuse increasingly
+capable models in the near future, giving defenders a chance to get ahead of them.
+What we learned from this and other analyses directly shapes how we build Claude to
+prevent such misuse. For example, we’ve updated the classifiers built into Claude to detect
+the highest-risk actors, and have expanded our probe detections to cover high-risk
+behavioral indicators revealed by this analysis. These findings point to a landscape where
+the dividing line between low and high-risk actors is no longer technical skill but
+orchestration, and where defenses, detections, and the shared frameworks we all rely on will
+need to evolve as fast as the attacks they describe.
+About the dataset
+The findings in this report are drawn from 832 accounts that Anthropic banned for violating
+cyber-related parts of our Usage Policy between March 2025 and March 2026. We identified
+these accounts through a combination of automated safeguards and investigations by our
+Threat Intelligence team. For each account, we produced a summary of the observed
+activity. We then extracted the tactics, techniques, and procedures (or TTPs) described in
+those summaries, and mapped them to the version of the MITRE ATT&CK framework that
+was live at that time (V18). In all, we observed 13,873 actions across 482 unique techniques
+and all 14 ATT&CK tactics.
+We gave each actor a risk score from 0 to 100 (with 0 being the lowest risk and 100 being
+the highest) based on a new methodology we’ve developed called the AI Risk Enablement
+Score (ARiES), described below. We’ve anonymized the data so that actors cannot be
+identified in the analysis that follows.
+The LLM ATT&CK Navigator and ARiES risk score
+As part of this analysis, we developed the LLM ATT&CK Navigator: an interactive framework
+that maps observed AI-enabled misuse patterns onto the MITRE ATT&CK framework and
+assigns an ARiES risk score to the actor. ARiES is a composite score built from three signals:
+the actor’s threat profile, the model’s contribution to the requested harm, and the observed
+or potential impact. It is calculated based on the actor's activity across Claude.ai, Claude
+Code, and our API, drawing on our safety classifiers alongside open-source and internal
+threat-intelligence indicators. The higher the score, the higher-risk the AI enabled actor is.
+Our framework scores both individual techniques and accounts across three dimensions:
+Threat (0–35 points): Evaluates the clarity of the actor’s intent, their technical
+sophistication, threat intelligence signals, and tactics employed by the account to
+evade detection. Technical sophistication is graded by Claude on the basis of the
+actor's prompts and tool usage, measuring expertise required, operator skill, bespoke-
+versus-commodity tooling, and capability depth.
+Vulnerability (0–35 points): Assesses the model’s capacity to enable the requested
+harm and the risk profile of the interface used. Programmatic interfaces (i.e. API) and
+agentic coding tools like Claude Code score highest due to their potential to automate
+actions.
+I
