@@ -1,12 +1,10 @@
 # Research corpus
 
-Full extracts live in this directory. Large files may be refreshed from the local Touchstone workspace.
+Full extracts live in this directory. Sourced into the Touchstone defensive ops desk (Research page + MAESTRO L1–L7 governance model).
 
-## Present in repo
+## Contents
 - `field-note-authority-boundaries.txt` — evidence-gated remediation / inputs ≠ grants
-- `llm-attack-navigator-anthropic.txt` — Anthropic LLM ATT&CK Navigator (trend awareness)
-
-## Expected companions (add via connector if missing)
+- `llm-attack-navigator-anthropic.txt` — Anthropic LLM ATT&CK Navigator (defensive trend awareness)
 - `maestro-in-practice.txt` — MAESTRO L1–L7 field study (Mazze LeCzzare Frazer, 2026)
 - `naked-truth-bearing-rigor.md` — Bearing / authority integrity research notes
 
