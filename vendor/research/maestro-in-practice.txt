@@ -1,1 +1,1 @@
-file:///workspace/vendor/research/maestro-in-practice.txt
+/workspace/vendor/research/maestro-in-practice.txt
