@@ -85,4 +85,65 @@ The external theoretical frame is equally important. Olteanu et al. describe six
 | **Normative** | Explicit policy, ratifier/trust root, axiomatic authority class, policy version | Whether the norm or value is ethically/socially appropriate or legitimate |
 | **Conceptual** | Typed distinction among signal, assertion, evidence, verification, authority, state, and report | Whether the construct itself validly captures the phenomenon |
 | **Methodological** | Deterministic folds, replay, invariants, parity, adversarial mutation, predeclared metrics | Whether the chosen test genuinely answers the research question |
-| **Reporting** | Append-only histories, derived projections, explicit unresolved state, source dossier,
+| **Reporting** | Append-only histories, derived projections, explicit unresolved state, source dossier, negative evidence | Whether the trace is complete and whether omitted context changes interpretation |
+| **Interpretative** | No silent promotion from assertion/check to truth; contradictions remain visible; argument bearing derived separately | Whether the substantive conclusion really follows from the total evidence |
+
+This is the key language adjustment I would make throughout the paper:
+
+> **The architecture operationalizes enforceable conditions of rigor; it does not mechanically instantiate the substantive adequacy of all six facets.**
+
+Aligning with Olteanu et al.'s broader conception while respecting Stratum's own explicit perimeter. 
+
+AGATE already demonstrates that explicit authorization provenance, data provenance, deterministic runtime judgment, consumable grants, and replayable grounds can be practically combined.  EAL-Bench shows that persistent memory can manufacture apparent authority without an adversarial injection and that event-sourced/source-backed mitigations trade safety against legitimate authorization availability. Agent Flight Recorder shows the neighboring value of structured, tamper-evident agent histories. W3C PROV provides a mature interoperability vocabulary around `Entity`, `Activity`, `Agent`, derivation, generation, attribution, usage, association, and delegation that can be reused instead of inventing provenance interchange from scratch. 
+
+The architecture and research lineage are therefore best understood as follows:
+
+```mermaid
+flowchart LR
+    ENV["Signals / external sources<br/>user · web · tools · files · agents"] --> AL
+
+    AL["Aletheia<br/>expose origin · trust · taint<br/>governing parameters · risk"]
+    AL --> TE["Temenos<br/>deterministic policy<br/>disposition + unresolved state"]
+    TE --> ST["Stratum<br/>append-only epistemic history<br/>authority basis + replay"]
+    ST --> HR["Human / authorized review<br/>verification · ratification · dispute"]
+
+    AP["Apatea<br/>mutations + invariants"] -. "contest" .-> AL
+    AP -. "contest policy assumptions" .-> TE
+    AP -. "future authority mutations" .-> ST
+
+    AL --> BE
+    TE --> BE
+    ST --> BE
+    AP --> BE
+
+    IF["Intentional Fragility<br/>Bearing method"] --> BE["Bearing rigor corpus<br/>claims · sources · fragments · checks<br/>independent frames · fold · LOO"]
+
+    BE --> DOS["Derived dossier / manuscript<br/>hold · fragile · gone · refuted<br/>counter-evidence visible"]
+
+    STE["Stele<br/>execution/session integrity"] -. "wider stack;<br/>not Temenos 0.1 dependency" .-> TE
+    AR["Adaptive Response<br/>typed output boundary"] -. "wider stack;<br/>not Temenos 0.1 dependency" .-> DOS
+```
+
+A useful research timeline is:
+
+```mermaid
+timeline
+    title Relevant research and artifact sequence
+    2025 : Olteanu et al. articulate six-facet conception of rigor
+    2026-09-01 : EAL-Bench studies endogenous authorization laundering
+               : Agent Flight Recorder studies structured tamper-evident agent audit
+    2026-09-20 : Public Temenos repository created
+    2026-09-25 : AGATE reports provenance-based runtime authorization evaluation
+    2026-09-26 : Intentional Fragility roadmap records Bearing v0.10.2 and tested engine state
+    2026-10 : Proposed Bearing rigor corpus and authority-laundering evaluation
+```
+
+The dates for the public research are taken from the primary publication records; the Temenos repository metadata records its September 20 creation, and the Intentional Fragility roadmap identifies version 0.10.2 on September 26.
+## Bearing-engine design for executable rigor
+
+The Bearing engine should be used as a **claim laboratory**, not as the runtime authority engine. That preserves the distinction between “how strongly does this research claim stand?” and “what is an agent allowed to do?”
+
+The proposed research corpus should use evidence frames that reflect genuinely different ways of knowing:
+
+| Frame | Evidence admitted | Independence rule |
+|---|---|---|
