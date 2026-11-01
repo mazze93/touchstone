@@ -147,3 +147,114 @@ The proposed research corpus should use evidence frames that reflect genuinely d
 
 | Frame | Evidence admitted | Independence rule |
 |---|---|---|
+| `implementation` | Code paths, schemas, tests, runtime traces | Multiple files from one component remain one implementation neighborhood |
+| `formal-semantics` | Transition proofs, invariant derivations, independent implementation parity | Must not merely restate implementation comments |
+| `external-literature` | Olteanu, AGATE, EAL-Bench, W3C, OWASP, NIST, other primary papers | Same paper cannot create several independent frames |
+| `adversarial-evaluation` | Mutation suite, threat scenarios, negative tests | Generated from predeclared operators and observable oracles |
+| `replication` | Clean-room replay or independently implemented reducer/evaluator | Must not share the tested implementation's decision logic |
+| `normative-review` | Independent human review of policies/constructs/value commitments | Author's own judgment should be provenance, not automatically an independent evidentiary frame |
+
+That last restriction follows the Bearing engine's own existing discipline. Intentional Fragility already supports non-counting frames and its roadmap explicitly records the decision that the author's own writing should not inflate the robustness of the book's claims; the audit also warns about derived-only support and hidden dependencies. fileciteturn15file0L2-L2 fileciteturn18file0L2-L2 fileciteturn37file0L2-L2
+
+**The current Bearing object model.** Let \(C\) be claims, \(S\) sources, \(F\) fragments, and \(K\) executable checks. The implementation permits evidence relations:
+
+\[
+R \in
+\{
+supports,\ tested\text{-}by,\ derives\text{-}from,\ contradicts
+\}
+\]
+
+with source-type constraints enforced by ledger validation. Frames are declared and disjoint at the tag level, and a claim cannot serve as evidence for itself. fileciteturn15file0L2-L2 fileciteturn17file0L2-L2
+
+A useful paper-specific evidence object is:
+
+\[
+e =
+(
+id,\ kind,\ source,\ relation,\ frame,\ provenance,\ check,\ outcome
+)
+\]
+
+where the last two fields may be null. This should map onto existing Bearing Source/Fragment/Check nodes rather than require a replacement data model.
+
+For claim \(c\) at ledger read-point \(t\), Bearing already computes:
+
+\[
+B_t(c)
+=
+Fold_B(L_{\leq t},F_{\text{active}},\pi)
+\]
+
+with:
+
+\[
+\rho_t(c)
+=
+\left|
+\{\text{distinct active supporting frames}\}
+\right|
+\]
+
+and the current policy:
+
+\[
+tier(c)=
+\begin{cases}
+refuted & \text{if explicit refute event exists}\\
+robust & \rho \ge 2\\
+fragile & \rho=1\\
+gone & \rho=0
+\end{cases}
+\]
+
+A `tested-by` edge contributes only after its most recent `run-check` outcome is `held`; contradiction remains visible rather than being silently deducted from the score. fileciteturn16file0L2-L2
+
+This should **not** be interpreted as:
+
+\[
+robust(c)\Rightarrow true(c)
+\]
+
+Two correlated or mistaken frames can support a false claim. The threshold of two is an explicit Bearing policy, not an epistemic theorem. The paper should say so prominently.
+
+**Runtime authority is a separate type system.** Stratum's semantics instead give us:
+
+\[
+A(x) =
+(g,b)
+\]
+
+where \(g\) represents governing capability and \(b\) represents the basis under which that capability was obtained.
+
+A minimal projection is:
+
+| Stratum authority state | Governing? | Basis |
+|---|---:|---|
+| `narrative` | no | assertion/prose |
+| `authoritative_provisional` | limited/not canonical | pending evidence or review |
+| `authoritative_verified` | yes | checked evidence + legal verification transition |
+| `authoritative_axiomatic` | yes | explicit trust root / ratification |
+
+Stratum deliberately keeps the final two non-equivalent: axiomatic authority is not “more verified” than verified authority, and verified authority is not “more legitimate” than an explicit policy axiom. They answer different questions. 
+
+The existing transition system is:
+
+$$
+asserted
+\rightarrow
+\{ratified,disputed\}
+
+$$
+$$
+pending\_evidence
+\rightarrow
+\{validated,rejected,disputed\}
+ $$
+$$
+
+validated
+\rightarrow
+\{contradicted,superseded\}
+$$
+$$contradic
