@@ -1,1 +1,1 @@
-PLACEHOLDER_USE_PYTHON_LOAD
+/workspace/vendor/research/naked-truth-bearing-rigor.md
