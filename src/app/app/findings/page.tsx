@@ -1,6 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { AuthorityMark } from "@/components/authority-mark";
+import { DisclosureLadder } from "@/components/disclosure-ladder";
 import {
   StatusBadge,
   severityTone,
@@ -47,11 +49,14 @@ const bases = Object.keys(AUTHORITY_BASIS_LABEL) as AuthorityBasis[];
 const BLOCKED =
   /(ignore\s+(previous|all|prior)|jailbreak|bypass\s+(filter|restrict|safeguard)|reproduction\s+steps|proof[-\s]?of[-\s]?concept|exploit\s+payload|\b[acgtu]{48,}\b)/i;
 
+type BasisFilter = AuthorityBasis | "all";
+
 export default function FindingsPage() {
-  const { partners, findings, addFinding, updateFinding, hydrated } =
+  const { partners, findings, addFinding, updateFinding, recordRefusal, hydrated } =
     useStore();
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [basisFilter, setBasisFilter] = useState<BasisFilter>("all");
   const [form, setForm] = useState({
     title: "",
     category: "process" as FindingCategory,
@@ -72,6 +77,11 @@ export default function FindingsPage() {
     return (id: string) => map.get(id) ?? "Unknown";
   }, [partners]);
 
+  const visible = useMemo(() => {
+    if (basisFilter === "all") return findings;
+    return findings.filter((f) => f.authorityBasis === basisFilter);
+  }, [findings, basisFilter]);
+
   if (!hydrated) {
     return <p className="text-sm text-muted-foreground">Loading findings…</p>;
   }
@@ -89,11 +99,31 @@ export default function FindingsPage() {
       setError("Offline reference must look like OFF-2026-0041.");
       return;
     }
-    if (
-      BLOCKED.test(form.title) ||
-      BLOCKED.test(form.operationalSummary) ||
-      BLOCKED.test(form.offlineReferenceId)
-    ) {
+    if (BLOCKED.test(form.title)) {
+      recordRefusal(
+        "title",
+        "Desk boundary refused title text that looks like payload or bypass material.",
+      );
+      setError(
+        "Desk boundary refused this text. Keep sequences, jailbreaks, and reproduction steps offline.",
+      );
+      return;
+    }
+    if (BLOCKED.test(form.operationalSummary)) {
+      recordRefusal(
+        "operationalSummary",
+        "Desk boundary refused summary text that looks like payload or bypass material.",
+      );
+      setError(
+        "Desk boundary refused this text. Keep sequences, jailbreaks, and reproduction steps offline.",
+      );
+      return;
+    }
+    if (BLOCKED.test(form.offlineReferenceId)) {
+      recordRefusal(
+        "offlineReferenceId",
+        "Offline reference field contained blocked material.",
+      );
       setError(
         "Desk boundary refused this text. Keep sequences, jailbreaks, and reproduction steps offline.",
       );
@@ -126,18 +156,20 @@ export default function FindingsPage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
+          <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
             Findings
           </p>
-          <h1 className="mt-1 font-heading text-3xl font-semibold tracking-tight">
+          <h1 className="mt-1 font-heading text-3xl font-semibold tracking-tight text-ink">
             Payload-free register
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-            Operational metadata and disclosure stage only. Technical detail
-            lives behind an offline reference id — never in this system.
+            Authority basis is first-class. Disclosure stage is a ladder. Technical
+            detail lives only behind an <span className="font-mono">OFF-…</span>{" "}
+            handle.
           </p>
         </div>
         <Button
+          className="bg-ink text-primary-foreground hover:bg-ink/90"
           onClick={() => {
             setForm((f) => ({ ...f, partnerId: partners[0]?.id ?? "" }));
             setOpen(true);
@@ -147,85 +179,134 @@ export default function FindingsPage() {
         </Button>
       </div>
 
-      <div className="rounded-xl border border-dashed border-primary/30 bg-primary/5 px-4 py-3 text-sm text-foreground/80">
-        Boundary rule: titles and summaries describe process, policy, or
-        communications outcomes. If material would help someone reproduce a
-        bypass, it does not belong here.
+      <div className="border border-assay/30 bg-accent/40 px-4 py-3 text-sm text-foreground/85">
+        <span className="font-heading font-semibold text-ink">Boundary rule.</span>{" "}
+        Titles and summaries describe process, policy, or communications outcomes.
+        If material would help someone reproduce a bypass, it does not belong here.
       </div>
 
-      <div className="grid gap-3">
-        {findings.map((f) => (
-          <article
-            key={f.id}
-            className="rounded-xl border border-border/80 bg-background/70 p-4"
+      <div className="flex flex-wrap items-center gap-2">
+        <p className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
+          Authority filter
+        </p>
+        {(
+          [
+            ["all", "All"],
+            ["narrative", "Narrative"],
+            ["provisional", "Provisional"],
+            ["authoritative_verified", "Verified"],
+            ["authoritative_axiomatic", "Axiomatic"],
+          ] as const
+        ).map(([value, label]) => (
+          <button
+            key={value}
+            type="button"
+            onClick={() => setBasisFilter(value)}
+            className={
+              basisFilter === value
+                ? "border border-ink bg-ink px-2.5 py-1 text-xs text-primary-foreground"
+                : "border border-border bg-card px-2.5 py-1 text-xs text-muted-foreground hover:border-ink/40 hover:text-ink"
+            }
           >
-            <div className="flex flex-wrap items-start justify-between gap-2">
-              <div>
-                <h2 className="font-heading text-lg font-semibold">{f.title}</h2>
-                <p className="text-xs text-muted-foreground">
-                  {partnerName(f.partnerId)} · {FINDING_CATEGORY_LABEL[f.category]}{" "}
-                  · owner {f.owner}
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-1.5">
-                <StatusBadge
-                  label={FINDING_SEVERITY_LABEL[f.severity]}
-                  tone={severityTone(f.severity)}
-                />
-                <StatusBadge
-                  label={FINDING_STATUS_LABEL[f.status]}
-                  tone={statusTone(f.status)}
-                />
-              </div>
-            </div>
-            <p className="mt-3 text-sm text-foreground/85">
-              {f.operationalSummary}
-            </p>
-            <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-              <span>
-                Disclosure: {DISCLOSURE_STAGE_LABEL[f.disclosureStage]}
-              </span>
-              <span>{MAESTRO_LAYER_LABEL[f.maestroLayer]}</span>
-              <span>{AUTHORITY_BASIS_LABEL[f.authorityBasis]}</span>
-              <span className="font-mono">{f.offlineReferenceId}</span>
-              <span>Updated {f.updatedAt}</span>
-            </div>
-            <div className="mt-3 flex flex-wrap gap-2">
-              <NativeSelect
-                className="w-auto"
-                value={f.status}
-                onChange={(e) =>
-                  updateFinding(f.id, {
-                    status: e.target.value as FindingStatus,
-                  })
-                }
-                aria-label="Update status"
-              >
-                {statuses.map((s) => (
-                  <option key={s} value={s}>
-                    {FINDING_STATUS_LABEL[s]}
-                  </option>
-                ))}
-              </NativeSelect>
-              <NativeSelect
-                className="w-auto"
-                value={f.disclosureStage}
-                onChange={(e) =>
-                  updateFinding(f.id, {
-                    disclosureStage: e.target.value as DisclosureStage,
-                  })
-                }
-                aria-label="Update disclosure stage"
-              >
-                {stages.map((s) => (
-                  <option key={s} value={s}>
-                    {DISCLOSURE_STAGE_LABEL[s]}
-                  </option>
-                ))}
-              </NativeSelect>
-            </div>
-          </article>
+            {label}
+          </button>
         ))}
+      </div>
+
+      <div className="divide-y divide-border border border-border">
+        {visible.length === 0 ? (
+          <p className="px-4 py-8 text-sm text-muted-foreground">
+            No findings match this authority filter.
+          </p>
+        ) : (
+          visible.map((f) => (
+            <article key={f.id} className="bg-card/80 px-4 py-4">
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <div className="min-w-0 flex-1">
+                  <h2 className="font-heading text-lg font-semibold text-ink">
+                    {f.title}
+                  </h2>
+                  <p className="mt-0.5 text-xs text-muted-foreground">
+                    {partnerName(f.partnerId)} · {FINDING_CATEGORY_LABEL[f.category]}{" "}
+                    · owner {f.owner}
+                  </p>
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    <StatusBadge
+                      label={FINDING_SEVERITY_LABEL[f.severity]}
+                      tone={severityTone(f.severity)}
+                    />
+                    <StatusBadge
+                      label={FINDING_STATUS_LABEL[f.status]}
+                      tone={statusTone(f.status)}
+                    />
+                    <span className="self-center font-mono text-[11px] text-muted-foreground">
+                      {f.offlineReferenceId}
+                    </span>
+                  </div>
+                </div>
+                <AuthorityMark basis={f.authorityBasis} className="w-52 shrink-0" />
+              </div>
+              <p className="mt-3 text-sm leading-relaxed text-foreground/85">
+                {f.operationalSummary}
+              </p>
+              <DisclosureLadder stage={f.disclosureStage} className="mt-3 max-w-xl" />
+              <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+                <span>{MAESTRO_LAYER_LABEL[f.maestroLayer]}</span>
+                <span>Updated {f.updatedAt}</span>
+              </div>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <NativeSelect
+                  className="w-auto"
+                  value={f.status}
+                  onChange={(e) =>
+                    updateFinding(f.id, {
+                      status: e.target.value as FindingStatus,
+                    })
+                  }
+                  aria-label="Update status"
+                >
+                  {statuses.map((s) => (
+                    <option key={s} value={s}>
+                      {FINDING_STATUS_LABEL[s]}
+                    </option>
+                  ))}
+                </NativeSelect>
+                <NativeSelect
+                  className="w-auto"
+                  value={f.disclosureStage}
+                  onChange={(e) =>
+                    updateFinding(f.id, {
+                      disclosureStage: e.target.value as DisclosureStage,
+                    })
+                  }
+                  aria-label="Update disclosure stage"
+                >
+                  {stages.map((s) => (
+                    <option key={s} value={s}>
+                      {DISCLOSURE_STAGE_LABEL[s]}
+                    </option>
+                  ))}
+                </NativeSelect>
+                <NativeSelect
+                  className="w-auto"
+                  value={f.authorityBasis}
+                  onChange={(e) =>
+                    updateFinding(f.id, {
+                      authorityBasis: e.target.value as AuthorityBasis,
+                    })
+                  }
+                  aria-label="Update authority basis"
+                >
+                  {bases.map((b) => (
+                    <option key={b} value={b}>
+                      {AUTHORITY_BASIS_LABEL[b]}
+                    </option>
+                  ))}
+                </NativeSelect>
+              </div>
+            </article>
+          ))
+        )}
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
@@ -394,7 +475,12 @@ export default function FindingsPage() {
             <Button variant="outline" onClick={() => setOpen(false)}>
               Cancel
             </Button>
-            <Button onClick={submit}>Save finding</Button>
+            <Button
+              className="bg-ink text-primary-foreground hover:bg-ink/90"
+              onClick={submit}
+            >
+              Save finding
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
