@@ -2,12 +2,12 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 const toneClass: Record<string, string> = {
-  neutral: "bg-muted text-muted-foreground border-transparent",
-  teal: "bg-[oklch(0.94_0.03_180)] text-[oklch(0.32_0.06_180)] border-transparent",
-  amber: "bg-[oklch(0.95_0.04_85)] text-[oklch(0.42_0.1_55)] border-transparent",
-  rose: "bg-[oklch(0.95_0.03_20)] text-[oklch(0.45_0.12_25)] border-transparent",
-  slate: "bg-[oklch(0.93_0.01_220)] text-[oklch(0.35_0.03_230)] border-transparent",
-  green: "bg-[oklch(0.94_0.04_145)] text-[oklch(0.35_0.08_145)] border-transparent",
+  neutral: "bg-muted text-muted-foreground border-border/60",
+  teal: "bg-[oklch(0.94_0.03_170)] text-[oklch(0.32_0.07_170)] border-[oklch(0.82_0.04_170)]",
+  amber: "bg-[oklch(0.95_0.04_85)] text-[oklch(0.42_0.1_55)] border-[oklch(0.86_0.05_80)]",
+  rose: "bg-[oklch(0.95_0.03_20)] text-[oklch(0.45_0.12_25)] border-[oklch(0.86_0.04_25)]",
+  slate: "bg-[oklch(0.94_0.01_250)] text-[oklch(0.35_0.03_250)] border-[oklch(0.86_0.015_250)]",
+  green: "bg-[oklch(0.94_0.04_145)] text-[oklch(0.35_0.08_145)] border-[oklch(0.84_0.04_145)]",
 };
 
 export function StatusBadge({

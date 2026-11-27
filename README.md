@@ -1,6 +1,10 @@
 # Touchstone
 
-Independent **defensive operations desk** for biosecurity safeguard engagement: partner CRM, payload-free findings, disclosure workflows, and governance checklists.
+Independent **defensive operations desk** for biosecurity safeguard engagement.
+
+**Assay the engagement record. Never the payload.**
+
+Partner CRM, payload-free findings with Stratum-style authority basis, disclosure ladders, and governance checklists — opinionated about what may enter the desk.
 
 Foundational tools are implemented in **Rust**, sourced from the sovereignty stack:
 
@@ -38,6 +42,8 @@ npm run dev -- --port 3847
 
 Open [http://localhost:3847](http://localhost:3847).
 
+Landing uses a stained hex tessellation imprint; a custom assay cursor pulls nearby tiles forward with a verdigris glow (fine pointer / motion prefs respected). The desk keeps a quieter imprint without taking over the system cursor.
+
 ## Rust tools
 
 ```bash
@@ -52,4 +58,3 @@ cargo run -p touchstone-cli -- scan "Partner acknowledged weekend escalation gap
 - Next.js (App Router) + TypeScript + Tailwind + shadcn/ui
 - Rust 2021 workspace (`crates/`)
 - Local-first demo state in `localStorage` (no database required)
-

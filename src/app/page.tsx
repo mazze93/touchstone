@@ -1,60 +1,66 @@
 import Link from "next/link";
-import { ArrowRight, ShieldCheck } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import { TessellationField } from "@/components/tessellation-field";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export default function HomePage() {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[oklch(0.985_0.012_185)]">
+    <div className="surface-mineral relative min-h-screen overflow-hidden">
+      <div aria-hidden className="surface-grain absolute inset-0 z-[1] opacity-40" />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 animate-drift bg-[radial-gradient(900px_520px_at_15%_10%,oklch(0.9_0.05_185),transparent_60%),radial-gradient(700px_480px_at_85%_0%,oklch(0.92_0.04_220),transparent_55%),linear-gradient(165deg,oklch(0.97_0.02_180),oklch(0.99_0.01_200))]"
+        className="pointer-events-none absolute inset-y-0 left-0 z-[2] w-[36%] max-w-lg bg-[linear-gradient(105deg,oklch(0.22_0.03_255_/0.9),oklch(0.28_0.04_250_/0.35)_48%,transparent)]"
       />
-      <div
-        aria-hidden
-        className="animate-pulse-soft pointer-events-none absolute -left-24 top-32 size-72 rounded-full bg-[oklch(0.75_0.08_175_/0.18)] blur-3xl"
-      />
+      <TessellationField intensity="hero" className="z-[5]" />
 
-      <header className="relative mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
-        <div className="flex items-center gap-2">
-          <span className="flex size-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
-            <ShieldCheck className="size-4" />
-          </span>
-          <span className="font-heading text-lg font-semibold tracking-tight">
-            Touchstone
-          </span>
-        </div>
+      <header className="relative z-10 mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
+        <p className="font-heading text-sm font-semibold tracking-[0.18em] text-ink">
+          TOUCHSTONE
+        </p>
         <Link
           href="/app"
-          className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
+          className={cn(
+            buttonVariants({ variant: "outline", size: "sm" }),
+            "border-ink/20 bg-background/70 backdrop-blur",
+          )}
         >
           Open desk
         </Link>
       </header>
 
-      <main className="relative mx-auto flex max-w-6xl flex-col px-6 pb-20 pt-10 md:pt-20">
-        <p className="animate-rise font-heading text-5xl font-semibold tracking-tight text-foreground md:text-7xl md:leading-[1.05]">
+      <main className="relative z-10 mx-auto flex min-h-[calc(100vh-5.5rem)] max-w-6xl flex-col justify-end px-6 pb-16 pt-10 md:justify-center md:pb-24 md:pt-0">
+        <p className="animate-ink-settle font-heading text-[clamp(3.25rem,12vw,7.5rem)] font-semibold leading-[0.9] tracking-tight text-ink md:max-w-[11ch]">
           Touchstone
         </p>
-        <h1 className="animate-rise-delay mt-5 max-w-2xl text-xl text-foreground/85 md:text-2xl md:leading-snug">
-          Defensive operations for safeguard engagement — partners, disclosure,
-          and governance without attack payloads.
+        <div className="animate-assay-draw assay-rule mt-6" />
+        <h1 className="animate-rise-delay mt-6 max-w-xl font-heading text-2xl font-medium leading-snug tracking-tight text-ink md:text-3xl">
+          Assay the engagement record.
+          <span className="block text-assay">Never the payload.</span>
         </h1>
-        <p className="animate-rise-delay mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base">
-          Built on Stratum’s evidence-gated ledger, STELE’s integrity boundary,
-          and Checkmate’s forward-only head anchors. Technical material stays
-          offline; the desk keeps the record.
+        <p className="animate-rise-late mt-4 max-w-md text-sm leading-relaxed text-foreground/75 md:text-base">
+          Partner CRM, disclosure ladders, and governance for safeguard work —
+          with Stratum authority, STELE tripwires, and offline refs only.
         </p>
-        <div className="animate-rise-delay mt-8 flex flex-wrap gap-3">
-          <Link href="/app" className={cn(buttonVariants({ size: "lg" }), "gap-2")}>
-            Enter operations desk
+        <div className="animate-rise-late mt-8 flex flex-wrap gap-3">
+          <Link
+            href="/app"
+            className={cn(
+              buttonVariants({ size: "lg" }),
+              "gap-2 bg-ink text-primary-foreground hover:bg-ink/90",
+            )}
+          >
+            Enter the desk
             <ArrowRight className="size-4" />
           </Link>
           <Link
-            href="/app/governance"
-            className={cn(buttonVariants({ size: "lg", variant: "outline" }))}
+            href="/app/findings"
+            className={cn(
+              buttonVariants({ size: "lg", variant: "outline" }),
+              "border-ink/25 bg-background/60",
+            )}
           >
-            Review governance
+            Payload-free register
           </Link>
         </div>
       </main>

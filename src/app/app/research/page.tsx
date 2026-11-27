@@ -18,11 +18,11 @@ export default function ResearchPage() {
   return (
     <div className="space-y-8">
       <div>
-        <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
+        <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
           Research library
         </p>
-        <h1 className="mt-1 font-heading text-3xl font-semibold tracking-tight">
-          Frameworks informing the desk
+        <h1 className="mt-1 font-heading text-3xl font-semibold tracking-tight text-ink">
+          What the desk is willing to mean
         </h1>
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
           Sourced into <code className="font-mono text-xs">vendor/research/</code>.
@@ -32,16 +32,15 @@ export default function ResearchPage() {
       </div>
 
       <section className="space-y-3">
-        <h2 className="font-heading text-lg font-semibold">
-          Claim ≠ evidence ≠ authority ≠ state ≠ truth
+        <h2 className="font-heading text-lg font-semibold text-ink">
+          Doctrine, spelled out
         </h2>
-        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="grid gap-px overflow-hidden border border-border bg-border sm:grid-cols-2 lg:grid-cols-5">
           {AUTHORITY_DISTINCTIONS.map((d) => (
-            <div
-              key={d.id}
-              className="rounded-xl border border-border/80 bg-background/70 p-3"
-            >
-              <p className="font-heading text-sm font-semibold">{d.label}</p>
+            <div key={d.id} className="bg-card p-3">
+              <p className="font-heading text-sm font-semibold text-ink">
+                {d.label}
+              </p>
               <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
                 {d.note}
               </p>
