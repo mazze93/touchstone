@@ -49,3 +49,5 @@ next-env.d.ts
 
 # seed leftover
 README.md.seed
+/.push-payloads/
+.cursor/
