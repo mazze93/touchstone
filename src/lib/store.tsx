@@ -22,7 +22,14 @@ import type {
   Partner,
 } from "@/lib/types";
 
-const STORAGE_KEY = "touchstone-desk-v2";
+const STORAGE_KEY = "touchstone-desk-v3";
+
+export type BoundaryRefusal = {
+  id: string;
+  at: string;
+  field: string;
+  reason: string;
+};
 
 type StoreState = {
   partners: Partner[];
@@ -33,6 +40,7 @@ type StoreState = {
 
 type StoreContextValue = StoreState & {
   hydrated: boolean;
+  refusals: BoundaryRefusal[];
   addPartner: (partner: Omit<Partner, "id" | "lastTouch">) => void;
   updatePartner: (id: string, patch: Partial<Partner>) => void;
   addEngagement: (
@@ -43,6 +51,7 @@ type StoreContextValue = StoreState & {
     finding: Omit<Finding, "id" | "createdAt" | "updatedAt">,
   ) => void;
   updateFinding: (id: string, patch: Partial<Finding>) => void;
+  recordRefusal: (field: string, reason: string) => void;
   toggleGovernance: (id: string, completedBy: string) => void;
   resetDemoData: () => void;
 };
@@ -66,6 +75,7 @@ const initialState: StoreState = {
 
 export function StoreProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<StoreState>(initialState);
+  const [refusals, setRefusals] = useState<BoundaryRefusal[]>([]);
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
@@ -73,6 +83,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       const raw = window.localStorage.getItem(STORAGE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw) as StoreState;
+        // localStorage rehydration must run once after mount (client-only).
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional hydrate-from-storage
         setState({
           partners: parsed.partners ?? SEED_PARTNERS,
           engagements: parsed.engagements ?? SEED_ENGAGEMENTS,
@@ -198,8 +210,21 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     }));
   }, []);
 
+  const recordRefusal = useCallback((field: string, reason: string) => {
+    setRefusals((prev) => [
+      ...prev,
+      {
+        id: uid("r"),
+        at: new Date().toISOString(),
+        field,
+        reason,
+      },
+    ]);
+  }, []);
+
   const resetDemoData = useCallback(() => {
     setState(initialState);
+    setRefusals([]);
     window.localStorage.removeItem(STORAGE_KEY);
   }, []);
 
@@ -207,24 +232,28 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     () => ({
       ...state,
       hydrated,
+      refusals,
       addPartner,
       updatePartner,
       addEngagement,
       updateEngagement,
       addFinding,
       updateFinding,
+      recordRefusal,
       toggleGovernance,
       resetDemoData,
     }),
     [
       state,
       hydrated,
+      refusals,
       addPartner,
       updatePartner,
       addEngagement,
       updateEngagement,
       addFinding,
       updateFinding,
+      recordRefusal,
       toggleGovernance,
       resetDemoData,
     ],

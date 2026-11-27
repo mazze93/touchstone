@@ -10,9 +10,10 @@ import {
   Handshake,
   LayoutDashboard,
   Menu,
-  Shield,
 } from "lucide-react";
 import { useState } from "react";
+import { DoctrineStrip } from "@/components/doctrine-strip";
+import { TessellationField } from "@/components/tessellation-field";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
@@ -30,7 +31,7 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
 
   return (
-    <nav className="flex flex-col gap-1">
+    <nav className="flex flex-col gap-0.5">
       {nav.map((item) => {
         const active =
           item.href === "/app"
@@ -43,10 +44,10 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
             href={item.href}
             onClick={onNavigate}
             className={cn(
-              "flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm transition-colors",
+              "flex items-center gap-2.5 border-l-2 px-3 py-2 text-sm transition-colors",
               active
-                ? "bg-primary text-primary-foreground shadow-sm"
-                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+                ? "border-assay bg-accent/60 font-medium text-ink"
+                : "border-transparent text-muted-foreground hover:border-stone hover:bg-muted/60 hover:text-foreground",
             )}
           >
             <Icon className="size-4 shrink-0" />
@@ -62,36 +63,35 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(1200px_600px_at_10%_-10%,oklch(0.93_0.04_180),transparent),radial-gradient(900px_500px_at_90%_0%,oklch(0.94_0.03_220),transparent),oklch(0.985_0.01_180)]">
-      <div className="mx-auto flex min-h-screen max-w-7xl gap-0 md:gap-6 md:px-6 md:py-6">
-        <aside className="hidden w-60 shrink-0 flex-col rounded-2xl border border-border/70 bg-card/80 p-4 shadow-sm backdrop-blur md:flex animate-rise">
-          <Link href="/" className="mb-6 flex items-center gap-2 px-2">
-            <span className="flex size-9 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-              <Shield className="size-4" />
-            </span>
-            <div>
-              <p className="font-heading text-base font-semibold tracking-tight">
-                Touchstone
-              </p>
-              <p className="text-[11px] text-muted-foreground">
-                Defensive ops only
-              </p>
-            </div>
+    <div className="surface-mineral relative min-h-screen">
+      <div aria-hidden className="surface-grain absolute inset-0 z-[1] opacity-45" />
+      <TessellationField intensity="desk" className="z-[2]" />
+      <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl gap-0 md:gap-8 md:px-6 md:py-6">
+        <aside className="animate-rise hidden w-56 shrink-0 flex-col border border-border/80 bg-card/90 p-4 md:flex">
+          <Link href="/" className="mb-5 px-2">
+            <p className="font-heading text-lg font-semibold tracking-tight text-ink">
+              Touchstone
+            </p>
+            <p className="mt-0.5 text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+              Assay desk
+            </p>
           </Link>
           <NavLinks />
-          <div className="mt-auto rounded-xl border border-dashed border-border/80 bg-muted/40 p-3 text-xs leading-relaxed text-muted-foreground">
-            Technical payloads are never stored here. Use offline references
-            for controlled materials.
+          <div className="mt-auto border border-dashed border-border bg-muted/30 p-3 text-[11px] leading-relaxed text-muted-foreground">
+            <p className="font-heading text-xs font-semibold text-foreground">
+              Boundary
+            </p>
+            <p className="mt-1">
+              Technical payloads are refused here. Offline refs only —
+              <span className="font-mono"> OFF-…</span>
+            </p>
           </div>
         </aside>
 
         <div className="flex min-w-0 flex-1 flex-col">
-          <header className="sticky top-0 z-20 flex items-center justify-between border-b border-border/60 bg-background/80 px-4 py-3 backdrop-blur md:hidden">
-            <Link href="/" className="flex items-center gap-2">
-              <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                <Shield className="size-3.5" />
-              </span>
-              <span className="font-heading font-semibold">Touchstone</span>
+          <header className="sticky top-0 z-20 flex items-center justify-between border-b border-border/70 bg-background/85 px-4 py-3 backdrop-blur md:hidden">
+            <Link href="/" className="font-heading font-semibold tracking-tight">
+              Touchstone
             </Link>
             <Button
               variant="outline"
@@ -103,16 +103,19 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </Button>
             <Sheet open={open} onOpenChange={setOpen}>
               <SheetContent side="left" className="w-72 p-4">
-                <div className="mb-6 flex items-center gap-2">
-                  <Shield className="size-4 text-primary" />
-                  <span className="font-heading font-semibold">Touchstone</span>
+                <div className="mb-6">
+                  <p className="font-heading font-semibold">Touchstone</p>
+                  <p className="text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                    Assay desk
+                  </p>
                 </div>
                 <NavLinks onNavigate={() => setOpen(false)} />
               </SheetContent>
             </Sheet>
           </header>
 
-          <main className="flex-1 px-4 py-5 animate-rise md:rounded-2xl md:border md:border-border/70 md:bg-card/70 md:px-6 md:py-6 md:shadow-sm md:backdrop-blur">
+          <main className="animate-rise flex-1 px-4 py-5 md:border md:border-border/80 md:bg-card/85 md:px-7 md:py-7">
+            <DoctrineStrip className="mb-6 hidden sm:flex" />
             {children}
           </main>
         </div>
