@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { Figtree, Syne, Geist_Mono } from "next/font/google";
+import { Manrope, Syne, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const figtree = Figtree({
-  variable: "--font-figtree",
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin"],
 });
 
@@ -18,18 +18,18 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Touchstone — defensive ops desk",
+  title: "Touchstone — assay the engagement record",
   description:
-    "Partner CRM, payload-free findings, and governance workflows for independent biosecurity safeguard engagement.",
+    "Opinionated defensive ops desk: partner CRM, payload-free findings, disclosure ladders, and governance. Assay the record. Never the payload.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${figtree.variable} ${syne.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${manrope.variable} ${syne.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-sans">{children}</body>
+      <body className="flex min-h-full flex-col font-sans">{children}</body>
     </html>
   );
 }
