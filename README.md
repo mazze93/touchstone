@@ -5,7 +5,7 @@
 Independent defensive operations desk for biosecurity safeguard engagement — partner CRM, payload-free findings, disclosure ladders, and governance, with Stratum authority and STELE tripwires.
 
 <p align="center">
-  <img src="docs/previews/landing-glow.jpg" alt="Touchstone landing — solid copy plate over stained hex imprint with verdigris cursor glow" width="920" />
+  <img src="docs/previews/landing-glow.svg" alt="Touchstone landing — solid copy plate over stained hex imprint with verdigris cursor glow" width="920" />
 </p>
 
 <p align="center"><em>Landing: mineral copy plate, stained hex imprint, assay cursor that lifts tiles with a verdigris glow.</em></p>
@@ -24,13 +24,13 @@ Touchstone is opinionated about what may enter the desk. It keeps **operational 
 
 | Landing (cursor glow) | Assay desk |
 |---|---|
-| <img src="docs/previews/landing-glow.jpg" alt="Landing with verdigris glow" width="440" /> | <img src="docs/previews/desk-overview.jpg" alt="Touchstone assay desk overview" width="440" /> |
+| <img src="docs/previews/landing-glow.svg" alt="Landing with verdigris glow" width="440" /> | <img src="docs/previews/desk-overview.svg" alt="Touchstone assay desk overview" width="440" /> |
 
 | At rest |
 |---|
-| <img src="docs/previews/landing-imprint.jpg" alt="Landing hex imprint at rest" width="640" /> |
+| <img src="docs/previews/landing-imprint.svg" alt="Landing hex imprint at rest" width="640" /> |
 
-Glow demo: [`docs/previews/landing-glow-demo.mp4`](docs/previews/landing-glow-demo.mp4)
+JPEG stills and glow demo also live under [`docs/previews/`](docs/previews/) (`*.jpg`, `landing-glow-demo.mp4`).
 
 ## Guardrail
 
