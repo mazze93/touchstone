@@ -14,6 +14,7 @@ import {
 import { useState } from "react";
 import { DoctrineStrip } from "@/components/doctrine-strip";
 import { TessellationField } from "@/components/tessellation-field";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
@@ -67,15 +68,18 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <div aria-hidden className="surface-grain absolute inset-0 z-[1] opacity-45" />
       <TessellationField intensity="desk" className="z-[2]" />
       <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl gap-0 md:gap-8 md:px-6 md:py-6">
-        <aside className="animate-rise hidden w-56 shrink-0 flex-col border border-border/80 bg-card/90 p-4 md:flex">
-          <Link href="/" className="mb-5 px-2">
-            <p className="font-heading text-lg font-semibold tracking-tight text-ink">
-              Touchstone
-            </p>
-            <p className="mt-0.5 text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-              Assay desk
-            </p>
-          </Link>
+        <aside className="animate-rise hidden w-56 shrink-0 flex-col border border-border/80 bg-card/90 p-4 backdrop-blur-sm dark:bg-card/75 md:flex">
+          <div className="mb-5 flex items-start justify-between gap-2 px-2">
+            <Link href="/">
+              <p className="font-heading text-lg font-semibold tracking-tight text-ink">
+                Touchstone
+              </p>
+              <p className="mt-0.5 text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                Assay desk
+              </p>
+            </Link>
+            <ThemeToggle />
+          </div>
           <NavLinks />
           <div className="mt-auto border border-dashed border-border bg-muted/30 p-3 text-[11px] leading-relaxed text-muted-foreground">
             <p className="font-heading text-xs font-semibold text-foreground">
@@ -93,14 +97,17 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <Link href="/" className="font-heading font-semibold tracking-tight">
               Touchstone
             </Link>
-            <Button
-              variant="outline"
-              size="icon-sm"
-              aria-label="Open menu"
-              onClick={() => setOpen(true)}
-            >
-              <Menu className="size-4" />
-            </Button>
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
+              <Button
+                variant="outline"
+                size="icon-sm"
+                aria-label="Open menu"
+                onClick={() => setOpen(true)}
+              >
+                <Menu className="size-4" />
+              </Button>
+            </div>
             <Sheet open={open} onOpenChange={setOpen}>
               <SheetContent side="left" className="w-72 p-4">
                 <div className="mb-6">
@@ -114,7 +121,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </Sheet>
           </header>
 
-          <main className="animate-rise flex-1 px-4 py-5 md:border md:border-border/80 md:bg-card/85 md:px-7 md:py-7">
+          <main className="animate-rise flex-1 px-4 py-5 md:border md:border-border/80 md:bg-card/85 md:px-7 md:py-7 md:backdrop-blur-sm dark:md:bg-card/70">
             <DoctrineStrip className="mb-6 hidden sm:flex" />
             {children}
           </main>

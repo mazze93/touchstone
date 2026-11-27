@@ -29,6 +29,13 @@ function hexPath(cx: number, cy: number, size: number) {
   return `M${pts.join("L")}Z`;
 }
 
+function readCssColor(name: string, fallback: string) {
+  const value = getComputedStyle(document.documentElement)
+    .getPropertyValue(name)
+    .trim();
+  return value || fallback;
+}
+
 type TessellationFieldProps = {
   className?: string;
   intensity?: "hero" | "desk";
@@ -42,6 +49,7 @@ export function TessellationField({
   const patternId = `tess-imprint-${reactId}`;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const cursorRef = useRef<HTMLDivElement>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -58,9 +66,25 @@ export function TessellationField({
 
     const hexes: Hex[] = [];
     let size = 30;
-    let pointer = { x: -9999, y: -9999, active: false };
+    const pointer = { x: -9999, y: -9999, active: false };
     let raf = 0;
     let alive = true;
+    let dark = document.documentElement.classList.contains("dark");
+
+    const syncSvgTheme = () => {
+      dark = document.documentElement.classList.contains("dark");
+      const fill = readCssColor("--hex-fill", "rgba(22, 28, 40, 0.16)");
+      const stroke = readCssColor("--hex-stroke", "rgba(18, 24, 36, 0.88)");
+      const svg = svgRef.current;
+      if (!svg) return;
+      svg.querySelectorAll("path").forEach((path) => {
+        path.setAttribute("fill", fill);
+        path.setAttribute("stroke", stroke);
+      });
+      svg.style.opacity = String(
+        intensity === "hero" ? (dark ? 0.85 : 0.72) : dark ? 0.45 : 0.35,
+      );
+    };
 
     const rebuild = () => {
       const w = window.innerWidth;
@@ -97,6 +121,8 @@ export function TessellationField({
       }
       canvas.dataset.hexCount = String(hexes.length);
       canvas.dataset.grid = `${cols}x${rows}@${size.toFixed(1)}`;
+      canvas.dataset.theme = dark ? "dark" : "light";
+      syncSvgTheme();
     };
 
     const draw = () => {
@@ -131,7 +157,7 @@ export function TessellationField({
         ctx.save();
         ctx.shadowColor = `rgba(56, 140, 120, ${0.25 + hex.glow * 0.75})`;
         ctx.shadowBlur = 14 + hex.glow * 32;
-        ctx.fillStyle = `rgba(64, 148, 128, ${hex.glow * 0.32})`;
+        ctx.fillStyle = `rgba(64, 148, 128, ${hex.glow * (dark ? 0.4 : 0.32)})`;
         ctx.fill(path);
         ctx.strokeStyle = `rgba(72, 168, 142, ${0.45 + hex.glow * 0.55})`;
         ctx.lineWidth = 1.8 + hex.glow * 1.5;
@@ -165,6 +191,15 @@ export function TessellationField({
       if (cursorEl) cursorEl.style.opacity = "0";
     };
 
+    const themeObserver = new MutationObserver(() => {
+      const next = document.documentElement.classList.contains("dark");
+      if (next !== dark) rebuild();
+    });
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class", "data-theme"],
+    });
+
     rebuild();
     raf = requestAnimationFrame(draw);
     window.addEventListener("resize", rebuild);
@@ -177,6 +212,7 @@ export function TessellationField({
     return () => {
       alive = false;
       cancelAnimationFrame(raf);
+      themeObserver.disconnect();
       window.removeEventListener("resize", rebuild);
       window.removeEventListener("pointermove", onMove);
       document.documentElement.removeEventListener("mouseleave", onLeave);
@@ -188,7 +224,6 @@ export function TessellationField({
   const s = isHero ? 34 : 24;
   const tileW = s * SQRT3;
   const tileH = s * 3;
-  const imprintOpacity = isHero ? 0.72 : 0.35;
 
   return (
     <div
@@ -196,9 +231,10 @@ export function TessellationField({
       className={`pointer-events-none fixed inset-0 overflow-hidden ${className}`}
     >
       <svg
+        ref={svgRef}
         className="absolute inset-0 size-full"
         xmlns="http://www.w3.org/2000/svg"
-        style={{ opacity: imprintOpacity }}
+        style={{ opacity: isHero ? 0.72 : 0.35 }}
       >
         <defs>
           <pattern
