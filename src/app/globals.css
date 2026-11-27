@@ -220,6 +220,31 @@
   );
 }
 
+/* Hero copy backplane — solid mineral plate over the hex imprint */
+.hero-copy-back {
+  position: relative;
+  max-width: 40rem;
+  padding: 1.75rem 1.5rem 1.85rem;
+  border: 1px solid color-mix(in oklch, var(--ink) 16%, transparent);
+  border-radius: 0.35rem;
+  background:
+    linear-gradient(
+      155deg,
+      oklch(0.985 0.008 95),
+      oklch(0.96 0.01 100) 55%,
+      oklch(0.97 0.008 90)
+    );
+  box-shadow:
+    0 1px 0 oklch(1 0 0 / 0.7) inset,
+    0 22px 48px oklch(0.18 0.025 255 / 0.18);
+}
+
+@media (min-width: 768px) {
+  .hero-copy-back {
+    padding: 2.25rem 2.35rem 2.4rem;
+  }
+}
+
 /* Custom assay cursor — only when tessellation field is live */
 @media (pointer: fine) {
   html.tessellation-cursor,

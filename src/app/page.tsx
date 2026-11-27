@@ -15,14 +15,14 @@ export default function HomePage() {
       <TessellationField intensity="hero" className="z-[5]" />
 
       <header className="relative z-10 mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
-        <p className="font-heading text-sm font-semibold tracking-[0.18em] text-ink">
+        <p className="rounded-sm bg-background/80 px-2.5 py-1 font-heading text-sm font-semibold tracking-[0.18em] text-ink backdrop-blur-sm">
           TOUCHSTONE
         </p>
         <Link
           href="/app"
           className={cn(
             buttonVariants({ variant: "outline", size: "sm" }),
-            "border-ink/20 bg-background/70 backdrop-blur",
+            "border-ink/20 bg-background/85 backdrop-blur",
           )}
         >
           Open desk
@@ -30,38 +30,40 @@ export default function HomePage() {
       </header>
 
       <main className="relative z-10 mx-auto flex min-h-[calc(100vh-5.5rem)] max-w-6xl flex-col justify-end px-6 pb-16 pt-10 md:justify-center md:pb-24 md:pt-0">
-        <p className="animate-ink-settle font-heading text-[clamp(3.25rem,12vw,7.5rem)] font-semibold leading-[0.9] tracking-tight text-ink md:max-w-[11ch]">
-          Touchstone
-        </p>
-        <div className="animate-assay-draw assay-rule mt-6" />
-        <h1 className="animate-rise-delay mt-6 max-w-xl font-heading text-2xl font-medium leading-snug tracking-tight text-ink md:text-3xl">
-          Assay the engagement record.
-          <span className="block text-assay">Never the payload.</span>
-        </h1>
-        <p className="animate-rise-late mt-4 max-w-md text-sm leading-relaxed text-foreground/75 md:text-base">
-          Partner CRM, disclosure ladders, and governance for safeguard work —
-          with Stratum authority, STELE tripwires, and offline refs only.
-        </p>
-        <div className="animate-rise-late mt-8 flex flex-wrap gap-3">
-          <Link
-            href="/app"
-            className={cn(
-              buttonVariants({ size: "lg" }),
-              "gap-2 bg-ink text-primary-foreground hover:bg-ink/90",
-            )}
-          >
-            Enter the desk
-            <ArrowRight className="size-4" />
-          </Link>
-          <Link
-            href="/app/findings"
-            className={cn(
-              buttonVariants({ size: "lg", variant: "outline" }),
-              "border-ink/25 bg-background/60",
-            )}
-          >
-            Payload-free register
-          </Link>
+        <div className="hero-copy-back animate-rise-delay">
+          <p className="animate-ink-settle font-heading text-[clamp(2.75rem,10vw,5.75rem)] font-semibold leading-[0.92] tracking-tight text-ink md:max-w-[11ch]">
+            Touchstone
+          </p>
+          <div className="animate-assay-draw assay-rule mt-5" />
+          <h1 className="mt-5 max-w-xl font-heading text-2xl font-medium leading-snug tracking-tight text-ink md:text-3xl">
+            Assay the engagement record.
+            <span className="block text-assay">Never the payload.</span>
+          </h1>
+          <p className="mt-4 max-w-md text-sm leading-relaxed text-ink/85 md:text-[0.95rem] md:leading-relaxed">
+            Partner CRM, disclosure ladders, and governance for safeguard work —
+            with Stratum authority, STELE tripwires, and offline refs only.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link
+              href="/app"
+              className={cn(
+                buttonVariants({ size: "lg" }),
+                "gap-2 bg-ink text-primary-foreground hover:bg-ink/90",
+              )}
+            >
+              Enter the desk
+              <ArrowRight className="size-4" />
+            </Link>
+            <Link
+              href="/app/findings"
+              className={cn(
+                buttonVariants({ size: "lg", variant: "outline" }),
+                "border-ink/30 bg-background/90",
+              )}
+            >
+              Payload-free register
+            </Link>
+          </div>
         </div>
       </main>
     </div>
