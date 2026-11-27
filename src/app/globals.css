@@ -88,6 +88,62 @@
   --sidebar-accent-foreground: oklch(0.28 0.05 170);
   --sidebar-border: oklch(0.84 0.015 100);
   --sidebar-ring: oklch(0.55 0.08 170);
+  --mineral-glass-fill-a: oklch(0.99 0.006 95 / 0.72);
+  --mineral-glass-fill-b: oklch(0.95 0.01 100 / 0.58);
+  --mineral-glass-edge: oklch(1 0 0 / 0.55);
+  --mineral-glass-rim: oklch(0.55 0.04 250 / 0.22);
+  --mineral-glass-depth: oklch(0.18 0.025 255 / 0.14);
+  --hex-fill: rgba(22, 28, 40, 0.16);
+  --hex-stroke: rgba(18, 24, 36, 0.88);
+}
+
+/*
+ * Dark mode: basalt / wet slate — not inverted cream, not purple neon.
+ * Verdigris stays the assay signal, lifted for contrast on dark stone.
+ */
+.dark {
+  --background: oklch(0.17 0.02 255);
+  --foreground: oklch(0.92 0.01 95);
+  --card: oklch(0.21 0.022 255);
+  --card-foreground: oklch(0.93 0.01 95);
+  --popover: oklch(0.2 0.022 255);
+  --popover-foreground: oklch(0.93 0.01 95);
+  --primary: oklch(0.78 0.04 170);
+  --primary-foreground: oklch(0.16 0.02 255);
+  --secondary: oklch(0.24 0.02 255);
+  --secondary-foreground: oklch(0.9 0.01 95);
+  --muted: oklch(0.23 0.018 255);
+  --muted-foreground: oklch(0.68 0.02 95);
+  --accent: oklch(0.28 0.045 170);
+  --accent-foreground: oklch(0.9 0.04 170);
+  --destructive: oklch(0.62 0.18 28);
+  --border: oklch(0.32 0.02 255);
+  --input: oklch(0.26 0.02 255);
+  --ring: oklch(0.62 0.1 170);
+  --assay: oklch(0.68 0.11 170);
+  --assay-foreground: oklch(0.14 0.02 255);
+  --ink: oklch(0.94 0.01 95);
+  --stone: oklch(0.42 0.02 255);
+  --chart-1: oklch(0.65 0.1 170);
+  --chart-2: oklch(0.62 0.07 85);
+  --chart-3: oklch(0.55 0.04 250);
+  --chart-4: oklch(0.65 0.1 40);
+  --chart-5: oklch(0.5 0.05 250);
+  --sidebar: oklch(0.19 0.022 255);
+  --sidebar-foreground: oklch(0.92 0.01 95);
+  --sidebar-primary: oklch(0.68 0.11 170);
+  --sidebar-primary-foreground: oklch(0.14 0.02 255);
+  --sidebar-accent: oklch(0.26 0.04 170);
+  --sidebar-accent-foreground: oklch(0.88 0.04 170);
+  --sidebar-border: oklch(0.3 0.02 255);
+  --sidebar-ring: oklch(0.62 0.1 170);
+  --mineral-glass-fill-a: oklch(0.26 0.025 255 / 0.62);
+  --mineral-glass-fill-b: oklch(0.2 0.02 255 / 0.48);
+  --mineral-glass-edge: oklch(0.85 0.03 170 / 0.28);
+  --mineral-glass-rim: oklch(0.7 0.08 170 / 0.35);
+  --mineral-glass-depth: oklch(0.05 0.02 255 / 0.45);
+  --hex-fill: rgba(180, 200, 210, 0.06);
+  --hex-stroke: rgba(170, 195, 205, 0.28);
 }
 
 @layer base {
@@ -186,6 +242,26 @@
     );
 }
 
+.dark .surface-mineral {
+  background-image:
+    radial-gradient(
+      1100px 640px at 8% -8%,
+      oklch(0.32 0.05 170 / 0.35),
+      transparent 55%
+    ),
+    radial-gradient(
+      900px 560px at 96% 8%,
+      oklch(0.28 0.03 255 / 0.55),
+      transparent 50%
+    ),
+    linear-gradient(
+      165deg,
+      oklch(0.15 0.022 255),
+      oklch(0.19 0.02 255) 48%,
+      oklch(0.16 0.018 250)
+    );
+}
+
 .surface-grain::before {
   content: "";
   pointer-events: none;
@@ -195,6 +271,11 @@
   mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
   animation: grain-shift 28s linear infinite;
+}
+
+.dark .surface-grain::before {
+  opacity: 0.22;
+  mix-blend-mode: soft-light;
 }
 
 .ruled-surface {
@@ -220,27 +301,106 @@
   );
 }
 
-/* Hero copy backplane — solid mineral plate over the hex imprint */
-.hero-copy-back {
+/*
+ * mineral-glass hero plate — glassmorphic stone:
+ * translucent body + specular rim that follows border curvature.
+ */
+.hero-copy-back.mineral-glass {
+  --glass-radius: 0.85rem;
   position: relative;
+  isolation: isolate;
   max-width: 40rem;
   padding: 1.75rem 1.5rem 1.85rem;
-  border: 1px solid color-mix(in oklch, var(--ink) 16%, transparent);
-  border-radius: 0.35rem;
+  border-radius: var(--glass-radius);
+  border: 1px solid transparent;
   background:
     linear-gradient(
-      155deg,
-      oklch(0.985 0.008 95),
-      oklch(0.96 0.01 100) 55%,
-      oklch(0.97 0.008 90)
-    );
+      145deg,
+      var(--mineral-glass-fill-a),
+      var(--mineral-glass-fill-b) 58%,
+      color-mix(in oklch, var(--mineral-glass-fill-b) 80%, var(--assay) 8%)
+    )
+    padding-box,
+    linear-gradient(
+      135deg,
+      var(--mineral-glass-edge),
+      var(--mineral-glass-rim) 38%,
+      transparent 62%,
+      color-mix(in oklch, var(--mineral-glass-rim) 55%, transparent)
+    )
+    border-box;
+  backdrop-filter: blur(18px) saturate(1.25);
+  -webkit-backdrop-filter: blur(18px) saturate(1.25);
   box-shadow:
-    0 1px 0 oklch(1 0 0 / 0.7) inset,
-    0 22px 48px oklch(0.18 0.025 255 / 0.18);
+    0 1px 0 var(--mineral-glass-edge) inset,
+    0 -18px 40px oklch(0.55 0.08 170 / 0.06) inset,
+    0 22px 48px var(--mineral-glass-depth),
+    0 0 0 1px color-mix(in oklch, var(--ink) 8%, transparent);
+}
+
+.hero-copy-back.mineral-glass::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(
+      120% 80% at 12% 0%,
+      oklch(1 0 0 / 0.38),
+      transparent 42%
+    ),
+    radial-gradient(
+      90% 60% at 92% 100%,
+      color-mix(in oklch, var(--assay) 22%, transparent),
+      transparent 50%
+    );
+  opacity: 0.85;
+  mix-blend-mode: soft-light;
+  z-index: 0;
+}
+
+.hero-copy-back.mineral-glass::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 1px;
+  border-radius: calc(var(--glass-radius) - 1px);
+  box-shadow:
+    inset 0 0 0 1px oklch(1 0 0 / 0.12),
+    inset 0 18px 28px oklch(1 0 0 / 0.08);
+  z-index: 0;
+}
+
+.dark .hero-copy-back.mineral-glass::before {
+  background:
+    radial-gradient(
+      120% 80% at 14% 0%,
+      oklch(0.85 0.04 170 / 0.22),
+      transparent 45%
+    ),
+    radial-gradient(
+      90% 60% at 90% 100%,
+      oklch(0.45 0.08 170 / 0.2),
+      transparent 52%
+    );
+  mix-blend-mode: screen;
+  opacity: 0.7;
+}
+
+.dark .hero-copy-back.mineral-glass::after {
+  box-shadow:
+    inset 0 0 0 1px oklch(0.75 0.06 170 / 0.18),
+    inset 0 16px 30px oklch(1 0 0 / 0.04);
+}
+
+.hero-copy-back.mineral-glass > * {
+  position: relative;
+  z-index: 1;
 }
 
 @media (min-width: 768px) {
-  .hero-copy-back {
+  .hero-copy-back.mineral-glass {
     padding: 2.25rem 2.35rem 2.4rem;
   }
 }
@@ -283,6 +443,13 @@
   will-change: transform, opacity;
   transition: opacity 0.15s ease;
   pointer-events: none;
+}
+
+.dark .tessellation-cursor-dot {
+  border-color: oklch(0.7 0.12 170 / 0.95);
+  box-shadow:
+    0 0 0 1px oklch(0.9 0.01 95 / 0.2),
+    0 0 18px oklch(0.62 0.12 170 / 0.45);
 }
 
 .tessellation-cursor-dot::before,
