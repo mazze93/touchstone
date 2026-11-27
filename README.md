@@ -26,9 +26,9 @@ Touchstone is opinionated about what may enter the desk. It keeps **operational 
 |---|---|
 | <img src="docs/previews/landing-glow.svg" alt="Landing with verdigris glow" width="440" /> | <img src="docs/previews/desk-overview.svg" alt="Touchstone assay desk overview" width="440" /> |
 
-| At rest |
-|---|
-| <img src="docs/previews/landing-imprint.svg" alt="Landing hex imprint at rest" width="640" /> |
+| Payload-free findings | At rest |
+|---|---|
+| <img src="docs/previews/findings-register.svg" alt="Payload-free findings register" width="440" /> | <img src="docs/previews/landing-imprint.svg" alt="Landing hex imprint at rest" width="440" /> |
 
 JPEG stills and glow demo also live under [`docs/previews/`](docs/previews/) (`*.jpg`, `landing-glow-demo.mp4`).
 
